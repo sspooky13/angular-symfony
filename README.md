@@ -28,13 +28,17 @@ Launch dockerized environment :
 
 	docker-compose up -d
 
-Log in application docker image :
+Log in server docker image :
 
-	docker-compose exec application bash
+	docker-compose exec server bash
 
 Install dependencies :
 
 	composer install
+
+Create database if it not exists :
+
+  php bin/console doctrine:database:create
 
 Update schemas (FOSUserBundle) :
 

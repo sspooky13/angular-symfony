@@ -33,10 +33,11 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.tokenService.hasAuthorizationToken()) {
-      this.username = localStorage.getItem('WSSE-Username');
-      this.created = localStorage.getItem('WSSE-CreatedAt');
-      this.secret = localStorage.getItem('WSSE-Secret');
+    if (this.tokenService.hasAuthorization()) {
+      const { username, created, secret } = this.tokenService.getAuthorization();
+      this.username = username;
+      this.created = created;
+      this.secret = secret;
     }
   }
 

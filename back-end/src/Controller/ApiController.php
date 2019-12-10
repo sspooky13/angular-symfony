@@ -11,11 +11,11 @@ use FOS\RestBundle\Controller\Annotations as Rest;
  */
 class ApiController extends AbstractController
 {
-    /**
-     * @Rest\Get("/hello")
-     */
-    public function helloAction()
-    {
-        return $this->json(['hello' => 'world']);
-    }
+  /**
+   * @Rest\Get("/hello")
+   */
+  public function helloAction()
+  {
+    return $this->json(['hello' => 'world']);
+  }
 }

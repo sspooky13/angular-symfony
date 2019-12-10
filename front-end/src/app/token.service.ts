@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
+import { CookieService } from 'ngx-cookie-service';
 import CryptoJS from 'crypto-js';
 import randomString from 'random-string';
 
@@ -11,21 +11,30 @@ export class TokenService {
 
   wsseToken: string;
 
-  constructor() { }
+  constructor(private cookieService: CookieService) { }
 
-  hasAuthorizationToken(): Boolean {
-    let hasUsername = new Boolean(localStorage.getItem('WSSE-Username'));
-    let hasCreated = new Boolean(localStorage.getItem('WSSE-CreatedAt'));
-    let hasSecret = new Boolean(localStorage.getItem('WSSE-Secret'));
+  hasAuthorization(): Boolean {
+    let hasUsername = new Boolean(this.cookieService.get('WSSE-Username'));
+    let hasCreated = new Boolean(this.cookieService.get('WSSE-CreatedAt'));
+    let hasSecret = new Boolean(this.cookieService.get('WSSE-Secret'));
 
     return hasUsername && hasCreated && hasSecret;
   }
 
+  getAuthorization(): { username: string, created: string, secret: string } {
+    // Generate a new token with new nonce each time otherwise it's a replay attack
+    let username = this.cookieService.get('WSSE-Username');
+    let created = this.cookieService.get('WSSE-CreatedAt');
+    let secret = this.cookieService.get('WSSE-Secret');
+
+    return { username, created, secret };
+  }
+
   getAuthorizationToken(): string | null {
     // Generate a new token with new nonce each time otherwise it's a replay attack
-    let username = localStorage.getItem('WSSE-Username');
-    let created = localStorage.getItem('WSSE-CreatedAt');
-    let secret = localStorage.getItem('WSSE-Secret');
+    let username = this.cookieService.get('WSSE-Username');
+    let created = this.cookieService.get('WSSE-CreatedAt');
+    let secret = this.cookieService.get('WSSE-Secret');
 
     if (!username || !created || !secret) {
       return null;
@@ -36,16 +45,16 @@ export class TokenService {
 
   setAuthorizationToken(username: string, created: string, secret: string) {
     // Save static parts of the token
-    localStorage.setItem('WSSE-Username', username);
-    localStorage.setItem('WSSE-CreatedAt', created);
-    localStorage.setItem('WSSE-Secret', secret);
+    this.cookieService.set('WSSE-Username', username);
+    this.cookieService.set('WSSE-CreatedAt', created);
+    this.cookieService.set('WSSE-Secret', secret);
   }
 
   cleanAuthorizationToken() {
     // Clean token informations
-    localStorage.removeItem('WSSE-Username');
-    localStorage.removeItem('WSSE-CreatedAt');
-    localStorage.removeItem('WSSE-Secret');
+    this.cookieService.delete('WSSE-Username');
+    this.cookieService.delete('WSSE-CreatedAt');
+    this.cookieService.delete('WSSE-Secret');
   }
 
   formatDate(d: Date): string {
@@ -84,7 +93,7 @@ export class TokenService {
     let digest = hash.toString(CryptoJS.enc.Base64);
 
     // Base64 Encode digest
-    let b64nonce =  CryptoJS.enc.Utf8.parse(nonce).toString(CryptoJS.enc.Base64);
+    let b64nonce = CryptoJS.enc.Utf8.parse(nonce).toString(CryptoJS.enc.Base64);
 
     // Return generated token
     return `UsernameToken Username="${username}", PasswordDigest="${digest}", Nonce="${b64nonce}", Created="${created}"`;

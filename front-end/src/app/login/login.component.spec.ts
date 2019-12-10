@@ -16,9 +16,9 @@ describe('LoginComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule
       ],
-      declarations: [ LoginComponent ]
+      declarations: [LoginComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

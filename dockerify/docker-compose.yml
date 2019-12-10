@@ -1,4 +1,4 @@
-application:
+server:
     build: ../back-end
     volumes:
         - ../back-end:/var/www
@@ -7,6 +7,8 @@ application:
 
 client:
     build: ../front-end
+    ports:
+      - 4200:4200
     volumes:
       - '../front-end:/app'
     links:
@@ -36,7 +38,7 @@ nginx-back:
     ports:
         - 8000:8000
     links:
-        - application
+        - server
     volumes:
         - ./nginx/nginx.conf:/etc/nginx/nginx.conf
         - ./nginx/symfony.conf:/etc/nginx/conf.d/default.conf

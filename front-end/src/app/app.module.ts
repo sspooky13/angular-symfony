@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { CookieService } from 'ngx-cookie-service';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HelloComponent } from './hello/hello.component';
@@ -22,7 +24,8 @@ import { httpInterceptorProviders } from './http-interceptor';
     HttpClientModule,
   ],
   providers: [
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

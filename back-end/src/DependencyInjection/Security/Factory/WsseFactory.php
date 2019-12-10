@@ -12,30 +12,29 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class WsseFactory implements SecurityFactoryInterface
 {
-    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
-    {
-        $providerId = 'security.authentication.provider.wsse.'.$id;
-        $container
-            ->setDefinition($providerId, new ChildDefinition(WsseProvider::class))
-            ->setArgument(0, new Reference($userProvider));
+  public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
+  {
+    $providerId = 'security.authentication.provider.wsse.' . $id;
+    $container
+      ->setDefinition($providerId, new ChildDefinition(WsseProvider::class))
+      ->setArgument(0, new Reference($userProvider));
 
-        $listenerId = 'security.authentication.listener.wsse.'.$id;
-        $container->setDefinition($listenerId, new ChildDefinition(WsseListener::class));
+    $listenerId = 'security.authentication.listener.wsse.' . $id;
+    $container->setDefinition($listenerId, new ChildDefinition(WsseListener::class));
 
-        return [$providerId, $listenerId, $defaultEntryPoint];
-    }
+    return [$providerId, $listenerId, $defaultEntryPoint];
+  }
 
-    public function getPosition()
-    {
-        return 'pre_auth';
-    }
+  public function getPosition()
+  {
+    return 'pre_auth';
+  }
 
-    public function getKey()
-    {
-        return 'wsse';
-    }
+  public function getKey()
+  {
+    return 'wsse';
+  }
 
-    public function addConfiguration(NodeDefinition $node)
-    {
-    }
+  public function addConfiguration(NodeDefinition $node)
+  { }
 }

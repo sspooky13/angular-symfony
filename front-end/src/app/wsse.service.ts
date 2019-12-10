@@ -19,11 +19,11 @@ export class WSSEService {
     private httpClient: HttpClient
   ) { }
 
-  postCredentials(credentials: credentialsType) : Observable<{secret?: string}> {
+  postCredentials(credentials: credentialsType): Observable<{ secret?: string }> {
     return this.httpClient.post(environment.server + '/login', credentials);
   }
 
-  getHello() : Observable<{hello?: string}> {
+  getHello(): Observable<{ hello?: string }> {
     return this.httpClient.get(environment.server + '/api/hello');
   }
 }
